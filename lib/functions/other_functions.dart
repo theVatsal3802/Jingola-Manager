@@ -32,4 +32,43 @@ class OtherFunctions {
     }
     await FirebaseFirestore.instance.collection("categories").doc(id).delete();
   }
+
+  static Future<void> updateMenuItem({
+    required String id,
+    required String imageUrl,
+    required String description,
+    required double price,
+  }) async {
+    await FirebaseFirestore.instance.collection("menu").doc(id).update(
+      {
+        "imageUrl": imageUrl,
+        "description": description,
+        "price": price.toStringAsFixed(2),
+      },
+    );
+  }
+
+  static Future<void> addMenuItem({
+    required String name,
+    required String imageUrl,
+    required String category,
+    required String description,
+    required double price,
+    required bool isVeg,
+  }) async {
+    await FirebaseFirestore.instance.collection("menu").add(
+      {
+        "name": name,
+        "imageUrl": imageUrl,
+        "category": category,
+        "description": description,
+        "price": price.toStringAsFixed(2),
+        "isVeg": isVeg,
+      },
+    );
+  }
+
+  static Future<void> deleteMenuItem(String id) async {
+    await FirebaseFirestore.instance.collection("menu").doc(id).delete();
+  }
 }

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../functions/other_functions.dart';
 
-class CategoryListTile extends StatelessWidget {
+class MenuListTile extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
   final Widget leading;
   final String id;
-  const CategoryListTile({
+  const MenuListTile({
     super.key,
     required this.title,
     required this.onTap,
@@ -20,10 +20,7 @@ class CategoryListTile extends StatelessWidget {
     return Dismissible(
       key: ValueKey(title),
       onDismissed: (direction) async {
-        await OtherFunctions.deleteCategory(
-          id,
-          title,
-        );
+        await OtherFunctions.deleteMenuItem(id);
       },
       background: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -45,22 +42,10 @@ class CategoryListTile extends StatelessWidget {
                 textScaleFactor: 1,
                 style: Theme.of(context).textTheme.headline4,
               ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Are you sure you want to permanently delete $title category?",
-                    textScaleFactor: 1,
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                  Text(
-                    "The Menu Items in this category will also be deleted",
-                    textScaleFactor: 1,
-                    style: Theme.of(context).textTheme.headline6!.copyWith(
-                          color: Colors.red,
-                        ),
-                  ),
-                ],
+              content: Text(
+                "Are you sure you want to permanently delete $title?",
+                textScaleFactor: 1,
+                style: Theme.of(context).textTheme.headline5,
               ),
               actions: [
                 TextButton(

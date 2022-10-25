@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import './menu_display_screen.dart';
 import './auth_screen.dart';
 import '../widgets/home_list_tile.dart';
 import './new_order_screen.dart';
@@ -64,7 +65,9 @@ class HomeScreen extends StatelessWidget {
             ),
             HomeListTile(
               title: "Edit Menu",
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed(MenuDisplayScreen.routeName);
+              },
               leading: const Icon(
                 Icons.menu_book,
                 size: 48,

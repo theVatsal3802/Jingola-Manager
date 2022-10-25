@@ -2,27 +2,31 @@ import 'package:flutter/material.dart';
 
 import '../functions/other_functions.dart';
 
-class EditCategoryScreen extends StatefulWidget {
-  static const routeName = "/edit-category";
-  final Map<String, dynamic>? data;
+class EditMenuScreen extends StatefulWidget {
+  static const routeName = "/edit-menu";
   final String id;
-
-  const EditCategoryScreen({
+  final Map<String, dynamic>? data;
+  const EditMenuScreen({
     super.key,
-    required this.data,
     required this.id,
+    required this.data,
   });
 
   @override
-  State<EditCategoryScreen> createState() => _EditCategoryScreenState();
+  State<EditMenuScreen> createState() => _EditMenuScreenState();
 }
 
-class _EditCategoryScreenState extends State<EditCategoryScreen> {
+class _EditMenuScreenState extends State<EditMenuScreen> {
   final nameController = TextEditingController();
+  final categoryController = TextEditingController();
+  final descriptionController = TextEditingController();
   final imageUrlController = TextEditingController();
+  final priceController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
   late Future<bool> isEdit;
   String link = "";
+  String price = "";
+  String desc = "";
   bool isLoading = false;
 
   Future<bool> isEditing() async {
@@ -32,7 +36,12 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
     setState(() {
       nameController.text = widget.data!["name"];
       link = widget.data!["imageUrl"];
+      desc = widget.data!["description"];
+      price = widget.data!["price"];
+      descriptionController.text = widget.data!["description"];
+      categoryController.text = widget.data!["category"];
       imageUrlController.text = widget.data!["imageUrl"];
+      priceController.text = widget.data!["price"];
     });
     return true;
   }
@@ -48,7 +57,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Edit Category",
+          "Edit Menu Item",
           textScaleFactor: 1,
           style: Theme.of(context).textTheme.headline5!.copyWith(
                 color: Colors.white,
@@ -90,20 +99,70 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                       children: [
                         snapshot.data ?? false
                             ? Text(
-                                nameController.text,
+                                "Name: ${nameController.text}",
                                 textScaleFactor: 1,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline4!
                                     .copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                     ),
                               )
                             : TextFormField(
                                 key: const ValueKey("name"),
                                 autocorrect: true,
                                 controller: nameController,
+                                enableSuggestions: true,
+                                keyboardType: TextInputType.name,
+                                textCapitalization: TextCapitalization.words,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      width: 0.5,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                      width: 0.5,
+                                      color: Colors.black54,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  prefixIcon: const Icon(
+                                    Icons.post_add,
+                                  ),
+                                  labelText: "Name",
+                                ),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Please enter item name";
+                                  }
+                                  return null;
+                                },
+                              ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        snapshot.data ?? false
+                            ? Text(
+                                "Category: ${categoryController.text}",
+                                textScaleFactor: 1,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4!
+                                    .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                              )
+                            : TextFormField(
+                                key: const ValueKey("category"),
+                                autocorrect: true,
+                                controller: categoryController,
                                 enableSuggestions: true,
                                 keyboardType: TextInputType.name,
                                 textCapitalization: TextCapitalization.words,
@@ -141,7 +200,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                           autocorrect: true,
                           controller: imageUrlController,
                           enableSuggestions: true,
-                          keyboardType: TextInputType.name,
+                          keyboardType: TextInputType.url,
                           textCapitalization: TextCapitalization.words,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -172,6 +231,94 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                         const SizedBox(
                           height: 30,
                         ),
+                        TextFormField(
+                          key: const ValueKey("description"),
+                          autocorrect: true,
+                          controller: descriptionController,
+                          enableSuggestions: true,
+                          keyboardType: TextInputType.multiline,
+                          textCapitalization: TextCapitalization.words,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 0.5,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 0.5,
+                                color: Colors.black54,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            prefixIcon: const Icon(
+                              Icons.description,
+                            ),
+                            labelText: "Description",
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter some description";
+                            }
+                            return null;
+                          },
+                          maxLines: 3,
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        TextFormField(
+                          key: const ValueKey("price"),
+                          controller: priceController,
+                          keyboardType: TextInputType.number,
+                          textCapitalization: TextCapitalization.none,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  width: 0.5,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  width: 0.5,
+                                  color: Colors.black54,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.description,
+                              ),
+                              labelText: "Price",
+                              prefixText: "₹"),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter price";
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        snapshot.data ?? false
+                            ? Text(
+                                "Vegetarian: ${widget.data!["isVeg"]}",
+                                textScaleFactor: 1,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4!
+                                    .copyWith(
+                                      color: widget.data!["isVeg"]
+                                          ? Colors.green
+                                          : Colors.red,
+                                    ),
+                              )
+                            : Container(),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         if (isLoading)
                           const CircularProgressIndicator.adaptive(),
                         if (!isLoading)
@@ -185,7 +332,9 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                               if (!valid) {
                                 return;
                               }
-                              if (link == imageUrlController.text.trim()) {
+                              if (link == imageUrlController.text.trim() &&
+                                  price == priceController.text.trim() &&
+                                  desc == descriptionController.text.trim()) {
                                 setState(() {
                                   isLoading = false;
                                 });
@@ -206,32 +355,43 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                               }
                               _formKey.currentState!.save();
                               snapshot.data!
-                                  ? await OtherFunctions.updateCategory(
-                                      widget.id,
-                                      imageUrlController.text.trim(),
+                                  ? await OtherFunctions.updateMenuItem(
+                                      id: widget.id,
+                                      imageUrl: imageUrlController.text.trim(),
+                                      description:
+                                          descriptionController.text.trim(),
+                                      price: double.parse(
+                                        priceController.text.trim(),
+                                      ),
                                     ).then(
-                                      (_) {
+                                      (value) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(
                                             content: Text(
-                                              "Category updated successfully",
+                                              "Menu Item updated successfully",
                                               textScaleFactor: 1,
                                             ),
                                           ),
                                         );
                                       },
                                     )
-                                  : await OtherFunctions.addCategory(
-                                      nameController.text.trim(),
-                                      imageUrlController.text.trim(),
+                                  : await OtherFunctions.addMenuItem(
+                                      name: nameController.text.trim(),
+                                      imageUrl: imageUrlController.text.trim(),
+                                      category: categoryController.text.trim(),
+                                      description:
+                                          descriptionController.text.trim(),
+                                      price: double.parse(
+                                          priceController.text.trim()),
+                                      isVeg: true,
                                     ).then(
                                       (_) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           const SnackBar(
                                             content: Text(
-                                              "Category added successfully",
+                                              "Menu Item added successfully",
                                               textScaleFactor: 1,
                                             ),
                                           ),
@@ -243,7 +403,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                               });
                             },
                             child: const Text(
-                              "Save Category",
+                              "Save Menu Item",
                               textScaleFactor: 1,
                             ),
                           ),

@@ -1,42 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/category_list_tile.dart';
-import './edit_category_screen.dart';
+import './edit_menu_screen.dart';
+import '../widgets/menu_list_tile.dart';
 
-class CategoryDisplayScreen extends StatelessWidget {
-  static const routeName = "/categories";
-  const CategoryDisplayScreen({super.key});
+class MenuDisplayScreen extends StatelessWidget {
+  static const routeName = "/menu-display";
+  const MenuDisplayScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed(
-            EditCategoryScreen.routeName,
-          );
-        },
-        tooltip: "Add New Category",
-        child: const Icon(
-          Icons.add,
-        ),
-      ),
       appBar: AppBar(
         title: Text(
-          "Categories",
+          "Menu Items",
           textScaleFactor: 1,
           style: Theme.of(context).textTheme.headline5!.copyWith(
                 color: Colors.white,
               ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(EditMenuScreen.routeName);
+        },
+        tooltip: "Add New Menu Item",
+        child: const Icon(
+          Icons.add,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: StreamBuilder(
-          stream:
-              FirebaseFirestore.instance.collection("categories").snapshots(),
+          stream: FirebaseFirestore.instance.collection("menu").snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -46,14 +42,14 @@ class CategoryDisplayScreen extends StatelessWidget {
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
-                return CategoryListTile(
+                return MenuListTile(
                   id: snapshot.data!.docs[index].id,
                   title: snapshot.data!.docs[index].get("name"),
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) {
-                          return EditCategoryScreen(
+                          return EditMenuScreen(
                             id: snapshot.data!.docs[index].id,
                             data: snapshot.data!.docs[index].data(),
                           );

@@ -7,8 +7,10 @@ import './screens/auth_screen.dart';
 import './screens/splash_screen.dart';
 import './screens/category_display_screen.dart';
 import './screens/edit_category_screen.dart';
-import 'screens/new_order_screen.dart';
+import './screens/new_order_screen.dart';
+import './screens/menu_display_screen.dart';
 import './screens/home_screen.dart';
+import './screens/edit_menu_screen.dart';
 import './screens/past_order_screen.dart';
 import './config/theme.dart';
 
@@ -50,6 +52,11 @@ class MyApp extends StatelessWidget {
         EditCategoryScreen.routeName: (context) => const EditCategoryScreen(
               data: {},
               id: "",
+            ),
+        MenuDisplayScreen.routeName: (context) => const MenuDisplayScreen(),
+        EditMenuScreen.routeName: (context) => const EditMenuScreen(
+              id: "",
+              data: {},
             ),
       },
     );
