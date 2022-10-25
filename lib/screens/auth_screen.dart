@@ -114,6 +114,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               autocorrect: false,
                               controller: passwordController,
                               enableSuggestions: false,
+                              obscureText: true,
                               textCapitalization: TextCapitalization.none,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
