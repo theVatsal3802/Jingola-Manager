@@ -28,7 +28,7 @@ class NewOrderScreen extends StatelessWidget {
                 .collection("orders")
                 .where(
                   "status",
-                  isNotEqualTo: "Out for Delivery",
+                  isNotEqualTo: "Delivered",
                 )
                 .snapshots(),
             builder: (context, snapshot) {

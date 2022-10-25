@@ -28,7 +28,7 @@ class PastOrderScreen extends StatelessWidget {
                 .collection("orders")
                 .where(
                   "status",
-                  isEqualTo: "Out for Delivery",
+                  isEqualTo: "Delivered",
                 )
                 .snapshots(),
             builder: (context, snapshot) {

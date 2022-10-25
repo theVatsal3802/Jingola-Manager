@@ -51,7 +51,7 @@ class _OrderTileState extends State<OrderTile> {
                   style: Theme.of(context).textTheme.headline5!.copyWith(
                         color: snapshot.data == "Pending"
                             ? Theme.of(context).colorScheme.primary
-                            : snapshot.data == "Out for Delivery"
+                            : snapshot.data == "Delivered"
                                 ? Colors.green
                                 : Theme.of(context).colorScheme.secondary,
                       ),
