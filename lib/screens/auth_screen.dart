@@ -165,7 +165,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     return;
                                   }
                                   _formKey.currentState!.save();
-                                  await AuthFunctions.loginChef(
+                                  await AuthFunctions.loginManager(
                                     context,
                                     emailController.text.trim().toLowerCase(),
                                     passwordController.text.trim(),
@@ -179,6 +179,17 @@ class _AuthScreenState extends State<AuthScreen> {
                                             .pushNamedAndRemoveUntil(
                                           HomeScreen.routeName,
                                           (route) => false,
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              "Something went wrong, please try again.",
+                                              textScaleFactor: 1,
+                                            ),
+                                            duration: Duration(seconds: 2),
+                                          ),
                                         );
                                       }
                                     },

@@ -43,31 +43,41 @@ class CategoryDisplayScreen extends StatelessWidget {
                 child: CircularProgressIndicator.adaptive(),
               );
             }
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                return CategoryListTile(
-                  id: snapshot.data!.docs[index].id,
-                  title: snapshot.data!.docs[index].get("name"),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return EditCategoryScreen(
-                            id: snapshot.data!.docs[index].id,
-                            data: snapshot.data!.docs[index].data(),
+            return snapshot.data!.docs.isEmpty
+                ? Center(
+                    child: Text(
+                      "No Categories added yet!",
+                      textScaleFactor: 1,
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      return CategoryListTile(
+                        id: snapshot.data!.docs[index].id,
+                        title: snapshot.data!.docs[index].get("name"),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return EditCategoryScreen(
+                                  id: snapshot.data!.docs[index].id,
+                                  data: snapshot.data!.docs[index].data(),
+                                );
+                              },
+                            ),
                           );
                         },
-                      ),
-                    );
-                  },
-                  leading: Image.network(
-                    snapshot.data!.docs[index].get("imageUrl"),
-                    fit: BoxFit.cover,
-                  ),
-                );
-              },
-            );
+                        leading: Image.network(
+                          snapshot.data!.docs[index].get("imageUrl"),
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                  );
           },
         ),
       ),

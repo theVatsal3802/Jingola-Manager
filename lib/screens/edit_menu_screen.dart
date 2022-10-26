@@ -47,6 +47,16 @@ class _EditMenuScreenState extends State<EditMenuScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    nameController.dispose();
+    categoryController.dispose();
+    descriptionController.dispose();
+    imageUrlController.dispose();
+    priceController.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     isEdit = isEditing();
@@ -330,6 +340,9 @@ class _EditMenuScreenState extends State<EditMenuScreen> {
                               FocusScope.of(context).unfocus();
                               bool valid = _formKey.currentState!.validate();
                               if (!valid) {
+                                setState(() {
+                                  isLoading = false;
+                                });
                                 return;
                               }
                               if (link == imageUrlController.text.trim() &&
@@ -352,6 +365,7 @@ class _EditMenuScreenState extends State<EditMenuScreen> {
                                     ),
                                   ),
                                 );
+                                return;
                               }
                               _formKey.currentState!.save();
                               snapshot.data!
@@ -363,6 +377,7 @@ class _EditMenuScreenState extends State<EditMenuScreen> {
                                       price: double.parse(
                                         priceController.text.trim(),
                                       ),
+                                      context: context,
                                     ).then(
                                       (value) {
                                         ScaffoldMessenger.of(context)
@@ -385,6 +400,7 @@ class _EditMenuScreenState extends State<EditMenuScreen> {
                                       price: double.parse(
                                           priceController.text.trim()),
                                       isVeg: true,
+                                      context: context,
                                     ).then(
                                       (_) {
                                         ScaffoldMessenger.of(context)

@@ -11,6 +11,7 @@ class MenuDisplayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: Text(
           "Menu Items",
@@ -20,13 +21,19 @@ class MenuDisplayScreen extends StatelessWidget {
               ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed(EditMenuScreen.routeName);
-        },
-        tooltip: "Add New Menu Item",
-        child: const Icon(
-          Icons.add,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(
+          bottom: 20,
+        ),
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed(EditMenuScreen.routeName);
+          },
+          tooltip: "Add New Menu Item",
+          child: const Icon(
+            Icons.add,
+          ),
         ),
       ),
       body: Padding(
@@ -39,31 +46,42 @@ class MenuDisplayScreen extends StatelessWidget {
                 child: CircularProgressIndicator.adaptive(),
               );
             }
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                return MenuListTile(
-                  id: snapshot.data!.docs[index].id,
-                  title: snapshot.data!.docs[index].get("name"),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return EditMenuScreen(
-                            id: snapshot.data!.docs[index].id,
-                            data: snapshot.data!.docs[index].data(),
+            return snapshot.data!.docs.isEmpty
+                ? Center(
+                    child: Text(
+                      "No Menu Items added yet!",
+                      textScaleFactor: 1,
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      return MenuListTile(
+                        id: snapshot.data!.docs[index].id,
+                        title: snapshot.data!.docs[index].get("name"),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return EditMenuScreen(
+                                  id: snapshot.data!.docs[index].id,
+                                  data: snapshot.data!.docs[index].data(),
+                                );
+                              },
+                            ),
                           );
                         },
-                      ),
-                    );
-                  },
-                  leading: Image.network(
-                    snapshot.data!.docs[index].get("imageUrl"),
-                    fit: BoxFit.cover,
-                  ),
-                );
-              },
-            );
+                        instock: snapshot.data!.docs[index].get("in stock"),
+                        leading: Image.network(
+                          snapshot.data!.docs[index].get("imageUrl"),
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                  );
           },
         ),
       ),

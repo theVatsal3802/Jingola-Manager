@@ -1,21 +1,54 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class OtherFunctions {
-  static Future<void> updateCategory(String id, String imageUrl) async {
-    await FirebaseFirestore.instance.collection("categories").doc(id).update(
-      {
-        "imageUrl": imageUrl,
-      },
-    );
+  static Future<void> updateCategory(
+    String id,
+    String imageUrl,
+    BuildContext context,
+  ) async {
+    try {
+      await FirebaseFirestore.instance.collection("categories").doc(id).update(
+        {
+          "imageUrl": imageUrl,
+        },
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Something went wrong, please try again.",
+            textScaleFactor: 1,
+          ),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
-  static Future<void> addCategory(String name, String imageUrl) async {
-    await FirebaseFirestore.instance.collection("categories").add(
-      {
-        "name": name,
-        "imageUrl": imageUrl,
-      },
-    );
+  static Future<void> addCategory(
+    String name,
+    String imageUrl,
+    BuildContext context,
+  ) async {
+    try {
+      await FirebaseFirestore.instance.collection("categories").add(
+        {
+          "name": name,
+          "imageUrl": imageUrl,
+        },
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Something went wrong, please try again.",
+            textScaleFactor: 1,
+          ),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   static Future<void> deleteCategory(String id, String name) async {
@@ -38,14 +71,27 @@ class OtherFunctions {
     required String imageUrl,
     required String description,
     required double price,
+    required BuildContext context,
   }) async {
-    await FirebaseFirestore.instance.collection("menu").doc(id).update(
-      {
-        "imageUrl": imageUrl,
-        "description": description,
-        "price": price.toStringAsFixed(2),
-      },
-    );
+    try {
+      await FirebaseFirestore.instance.collection("menu").doc(id).update(
+        {
+          "imageUrl": imageUrl,
+          "description": description,
+          "price": price.toStringAsFixed(2),
+        },
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Something went wrong, please try again.",
+            textScaleFactor: 1,
+          ),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   static Future<void> addMenuItem({
@@ -55,20 +101,112 @@ class OtherFunctions {
     required String description,
     required double price,
     required bool isVeg,
+    required BuildContext context,
   }) async {
-    await FirebaseFirestore.instance.collection("menu").add(
-      {
-        "name": name,
-        "imageUrl": imageUrl,
-        "category": category,
-        "description": description,
-        "price": price.toStringAsFixed(2),
-        "isVeg": isVeg,
-      },
-    );
+    try {
+      await FirebaseFirestore.instance.collection("menu").add(
+        {
+          "name": name,
+          "imageUrl": imageUrl,
+          "category": category,
+          "description": description,
+          "price": price.toStringAsFixed(2),
+          "isVeg": isVeg,
+        },
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Something went wrong, please try again.",
+            textScaleFactor: 1,
+          ),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
-  static Future<void> deleteMenuItem(String id) async {
-    await FirebaseFirestore.instance.collection("menu").doc(id).delete();
+  static Future<void> deleteMenuItem(
+    String id,
+    BuildContext context,
+  ) async {
+    try {
+      await FirebaseFirestore.instance.collection("menu").doc(id).delete();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Something went wrong, please try again.",
+            textScaleFactor: 1,
+          ),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  static Future<void> markOutOfStock(String id, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance.collection("menu").doc(id).update(
+        {
+          "in stock": false,
+        },
+      ).then(
+        (_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "Item Marked Out of Stock",
+                textScaleFactor: 1,
+              ),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Something went wrong, please try again.",
+            textScaleFactor: 1,
+          ),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  static Future<void> markInStock(String id, BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance.collection("menu").doc(id).update(
+        {
+          "in stock": true,
+        },
+      ).then(
+        (_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "Item Marked In Stock",
+                textScaleFactor: 1,
+              ),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Something went wrong, please try again.",
+            textScaleFactor: 1,
+          ),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 }

@@ -7,12 +7,14 @@ class MenuListTile extends StatelessWidget {
   final VoidCallback onTap;
   final Widget leading;
   final String id;
+  final bool instock;
   const MenuListTile({
     super.key,
     required this.title,
     required this.onTap,
     required this.leading,
     required this.id,
+    required this.instock,
   });
 
   @override
@@ -20,7 +22,10 @@ class MenuListTile extends StatelessWidget {
     return Dismissible(
       key: ValueKey(title),
       onDismissed: (direction) async {
-        await OtherFunctions.deleteMenuItem(id);
+        await OtherFunctions.deleteMenuItem(
+          id,
+          context,
+        );
       },
       background: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -98,6 +103,26 @@ class MenuListTile extends StatelessWidget {
             textScaleFactor: 1,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headline4,
+          ),
+          trailing: Tooltip(
+            message: instock ? "Mark as Not in Stock" : "Mark as In Stock",
+            child: IconButton(
+              onPressed: () async {
+                instock
+                    ? await OtherFunctions.markOutOfStock(
+                        id,
+                        context,
+                      )
+                    : await OtherFunctions.markInStock(
+                        id,
+                        context,
+                      );
+              },
+              icon: Icon(
+                instock ? Icons.close : Icons.check,
+                color: instock ? Colors.red : Colors.green,
+              ),
+            ),
           ),
         ),
       ),
