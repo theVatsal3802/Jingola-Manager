@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jingola_manager">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="jingola_manager"
+        android:label="Jingola Manager"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

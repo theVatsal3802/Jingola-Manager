@@ -216,7 +216,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
                                 return;
                               }
                               _formKey.currentState!.save();
-                              snapshot.data!
+                              snapshot.data ?? false
                                   ? await OtherFunctions.updateCategory(
                                       widget.id,
                                       imageUrlController.text.trim(),

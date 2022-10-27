@@ -112,6 +112,7 @@ class OtherFunctions {
           "description": description,
           "price": price.toStringAsFixed(2),
           "isVeg": isVeg,
+          "in stock": true
         },
       );
     } catch (e) {

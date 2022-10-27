@@ -28,6 +28,7 @@ class _EditMenuScreenState extends State<EditMenuScreen> {
   String price = "";
   String desc = "";
   bool isLoading = false;
+  bool veg = true;
 
   Future<bool> isEditing() async {
     if (widget.data == null) {
@@ -325,7 +326,30 @@ class _EditMenuScreenState extends State<EditMenuScreen> {
                                           : Colors.red,
                                     ),
                               )
-                            : Container(),
+                            : CheckboxListTile(
+                                tileColor: Theme.of(context)
+                                    .colorScheme
+                                    .secondary
+                                    .withOpacity(0.5),
+                                activeColor:
+                                    Theme.of(context).colorScheme.primary,
+                                subtitle: Text(
+                                  "Uncheck the check box if the item is non veg",
+                                  textScaleFactor: 1,
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                ),
+                                title: Text(
+                                  "Is Item Veg",
+                                  textScaleFactor: 1,
+                                  style: Theme.of(context).textTheme.headline4,
+                                ),
+                                value: veg,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    veg = newValue!;
+                                  });
+                                },
+                              ),
                         const SizedBox(
                           height: 20,
                         ),
@@ -368,7 +392,7 @@ class _EditMenuScreenState extends State<EditMenuScreen> {
                                 return;
                               }
                               _formKey.currentState!.save();
-                              snapshot.data!
+                              snapshot.data ?? false
                                   ? await OtherFunctions.updateMenuItem(
                                       id: widget.id,
                                       imageUrl: imageUrlController.text.trim(),
@@ -399,7 +423,7 @@ class _EditMenuScreenState extends State<EditMenuScreen> {
                                           descriptionController.text.trim(),
                                       price: double.parse(
                                           priceController.text.trim()),
-                                      isVeg: true,
+                                      isVeg: veg,
                                       context: context,
                                     ).then(
                                       (_) {
